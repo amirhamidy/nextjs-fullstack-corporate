@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Fullstack Corporate
+
+A fullstack corporate website built entirely with Next.js — no separate backend, no external API. Public marketing pages, an admin panel, and a dedicated SEO management system, all powered by the same Next.js application.
+
+## Tech Stack
+
+- **Framework:** Next.js (App Router, TypeScript)
+- **Styling:** Tailwind CSS + shadcn/ui (Base UI, Nova preset)
+- **Database:** SQLite via Drizzle ORM (`@libsql/client`)
+- **Forms:** React Hook Form + Zod validation
+- **Package Manager:** pnpm
+
+## Features
+
+### Public site
+
+- Static/ISR-rendered pages for maximum speed
+- Portfolio showcase, blog, contact form
+- RTL support with Persian typography (Vazirmatn)
+- Dark mode
+
+### Admin panel
+
+- Authenticated dashboard
+- Content management (portfolio, blog posts)
+- Contact message inbox
+- Dedicated SEO controls: meta tags, slugs, OG images, sitemap, robots.txt, redirect management
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+pnpm drizzle-kit migrate
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+src/
+app/ # Routes (App Router)
+components/ # UI components (shadcn/ui + custom)
+db/ # Drizzle schema and database client
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Command                     | Description                                  |
+| --------------------------- | -------------------------------------------- |
+| `pnpm dev`                  | Start development server                     |
+| `pnpm build`                | Build for production                         |
+| `pnpm drizzle-kit generate` | Generate a new migration from schema changes |
+| `pnpm drizzle-kit migrate`  | Apply migrations to the database             |
+| `pnpm drizzle-kit studio`   | Open a visual database browser               |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Status
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+🚧 Actively in development. This README will be updated as features are completed.
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is for portfolio purposes.
