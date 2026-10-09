@@ -1,6 +1,5 @@
 
 import Link from "next/link";
-import { ArrowUpLeft } from "lucide-react";
 import HomeMobileMenu from "./home-mobile-menu";
 import Image from "next/image";
 
@@ -16,9 +15,8 @@ export default function HomeHeader() {
         <header className="w-full px-4 pt-4 sm:px-6 lg:px-8">
             <div
                 dir="ltr"
-                className="mx-auto grid w-full max-w-7xl grid-cols-[1fr_auto_1fr] items-center rounded-[2rem] border border-white/[0.09] bg-[#111019]/80 px-4 py-3 shadow-[0_8px_40px_rgba(109,40,217,0.08)] backdrop-blur-2xl sm:px-6"
+                className="mx-auto grid w-full max-w-7xl grid-cols-[1fr_auto_1fr] items-center rounded-[3rem] border border-white/[0.09] bg-[#111019]/80 px-4 py-3  backdrop-blur-2xl sm:px-6"
             >
-
                 <Link
                     href="/"
                     aria-label="صفحه اصلی رادکو"
@@ -36,15 +34,8 @@ export default function HomeHeader() {
                         <span className="text-base font-extrabold tracking-wide text-white sm:text-lg">
                             رادکو
                         </span>
-                        <span
-                            dir="rtl"
-                            className="text-[10px] text-white/45 sm:text-xs"
-                        >
-                            راهکارهای نرم‌افزاری
-                        </span>
                     </span>
                 </Link>
-
                 <nav
                     aria-label="منوی اصلی"
                     dir="rtl"
@@ -60,28 +51,28 @@ export default function HomeHeader() {
                         </Link>
                     ))}
                 </nav>
-
                 <div className="flex items-center justify-end gap-2">
-                    <div dir="rtl" className="hidden items-center gap-2 md:flex">
-                        <Link
-                            href="#"
-                            className="rounded-full px-4 py-2.5 text-sm font-medium text-white/75 transition-colors hover:bg-white/[0.06] hover:text-white"
-                        >
-                            ورود
-                        </Link>
+                    <div dir="rtl" className="hidden md:flex">
+                        <div className="rounded-full bg-gradient-to-l from-violet-500/35 via-purple-400/25 to-blue-500/30 p-px transition-all duration-300 hover:bg-purple-600">
+                            <Link
+                                href="#"
+                                className="group flex items-center gap-1 rounded-full bg-[#111019] p-1 text-sm transition-colors duration-300 hover:bg-violet-500/20"
+                            >
+                                <span className="rounded-full px-4 py-2 font-medium text-white/70 transition-colors duration-200 group-hover:text-white">
+                                    ورود
+                                </span>
 
-                        <Link
-                            href="#"
-                            className="group inline-flex items-center gap-2 rounded-full bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-violet-500 hover:shadow-lg hover:shadow-violet-600/20"
-                        >
-                            شروع همکاری
-                            <ArrowUpLeft
-                                size={16}
-                                className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                            />
-                        </Link>
+                                <span
+                                    aria-hidden="true"
+                                    className="h-4 w-px bg-white/15 transition-colors duration-300 group-hover:bg-white/30"
+                                />
+
+                                <span className="rounded-full px-4 py-2 font-medium text-white/70 transition-colors duration-200 group-hover:text-white">
+                                    ثبت‌ نام
+                                </span>
+                            </Link>
+                        </div>
                     </div>
-
                     <div className="md:hidden">
                         <HomeMobileMenu items={navigationItems} />
                     </div>
