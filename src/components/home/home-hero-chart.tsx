@@ -32,7 +32,7 @@ const salesData = {
 const sources = [
     { resourceId: 1, name: "اینستاگرام", color: "#f472b6", glow: "rgba(244,114,182,0.55)" },
     { resourceId: 2, name: "معرفی مشتری", color: "#38bdf8", glow: "rgba(56,189,248,0.55)" },
-    { resourceId: 3, name: "وب‌سایت", color: "#fbbf24", glow: "rgba(251,191,36,0.55)"},
+    { resourceId: 3, name: "وب‌سایت", color: "#fbbf24", glow: "rgba(251,191,36,0.55)" },
     { resourceId: 4, name: "تماس تلفنی", color: "#2dd4bf", glow: "rgba(45,212,191,0.55)" },
 ];
 
@@ -90,12 +90,10 @@ export default function HomeHero() {
                 return;
             }
 
-            // انیمیشن لودر
             gsap.to(coreRef.current, { scale: 1.45, opacity: 0.85, duration: 1.2, ease: "power2.inOut", repeat: -1, yoyo: true });
             gsap.fromTo(ringRef.current, { scale: 0.4, opacity: 0.8 }, { scale: 1.9, opacity: 0, duration: 2, ease: "power2.out", repeat: -1 });
             gsap.fromTo(ringTwoRef.current, { scale: 0.4, opacity: 0.6 }, { scale: 1.9, opacity: 0, duration: 2, ease: "power2.out", repeat: -1, delay: 0.9 });
 
-            // انیمیشن تیتر و بج
             gsap.timeline({
                 defaults: { ease: "expo.out" },
                 onComplete: () => {
@@ -105,7 +103,6 @@ export default function HomeHero() {
                 .fromTo(badgeRef.current, { opacity: 0, y: -30, scale: 0.85, filter: "blur(12px)" }, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 1.2 }, 0)
                 .fromTo(titleRef.current, { opacity: 0, y: 90, scale: 0.6, rotateX: -60, filter: "blur(25px)", transformPerspective: 1000, transformOrigin: "50% 100%" }, { opacity: 1, y: 0, scale: 1, rotateX: 0, filter: "blur(0px)", duration: 1.6 }, 0.1);
 
-            // حذف ویژوال لودر بدون آنمانت کردن نود
             gsap.to(loaderRef.current, {
                 opacity: 0,
                 scale: 0.5,
@@ -118,7 +115,6 @@ export default function HomeHero() {
                 }
             });
 
-            // شروع انیمیشن‌های تنفس
             breathRefs.current.forEach((el, i) => {
                 if (el) gsap.to(el, { y: i % 2 === 0 ? -9 : 8, scale: 1.018, duration: 3.2 + i * 0.4, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1 + i * 0.2, force3D: true });
             });
