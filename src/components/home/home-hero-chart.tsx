@@ -254,7 +254,6 @@ export default function HomeHero() {
             <div dir="ltr" className="relative mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
                 <div className="flex w-full justify-center lg:justify-start">
                     <div className="relative min-h-[300px] w-full [--card:min(300px,82vw)] lg:h-[calc(var(--card)*2_+_3.25rem)] lg:min-h-0 lg:w-[calc(var(--card)*2_+_1.25rem)] lg:[--card:clamp(170px,min(calc((100svh_-_236px)/2),20vw),260px)]">
-                        {/* لودر همیشه داخل DOM باقی می‌ماند تا ری‌اکت در removeChild به ارور نخورد */}
                         <div ref={loaderRef} className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center transition-opacity duration-300">
                             <span ref={ringRef} className="absolute h-16 w-16 rounded-full border border-violet-300/60" />
                             <span ref={ringTwoRef} className="absolute h-16 w-16 rounded-full border border-sky-300/50" />
