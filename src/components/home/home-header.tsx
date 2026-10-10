@@ -12,7 +12,7 @@ const navigationItems = [
 
 export default function HomeHeader() {
     return (
-        <header className="w-full px-4 pt-4 sm:px-6 lg:px-8">
+        <header className="w-full px-4 pt-4 sticky top-2.5 sm:px-6 lg:px-8">
             <div
                 dir="ltr"
                 className="mx-auto grid w-full max-w-7xl grid-cols-[1fr_auto_1fr] items-center rounded-[3rem] border border-white/[0.09] bg-[#111019]/80 px-4 py-3  backdrop-blur-2xl sm:px-6"

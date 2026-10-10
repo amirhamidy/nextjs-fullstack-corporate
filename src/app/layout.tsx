@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import "./globals.css";
+import "aos/dist/aos.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 const vazirmatn = Vazirmatn({

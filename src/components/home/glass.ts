@@ -1,0 +1,2 @@
+export const glassSurface =
+  "h-full w-full overflow-hidden border-white/15 bg-[linear-gradient(135deg,rgba(30,27,100,0.82),rgba(37,99,235,0.5)_55%,rgba(124,58,237,0.6))] shadow-[0_30px_90px_rgba(49,46,129,0.45),inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-md before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-white/40 before:to-transparent";
