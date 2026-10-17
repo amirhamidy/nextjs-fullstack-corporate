@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 import Image from "next/image";
+import { Lock } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
@@ -20,7 +21,10 @@ const imageSizes = "(min-width: 1024px) 40vw, 90vw";
 const frameSize =
     "relative mx-auto aspect-[4/5] w-full max-w-sm lg:h-[min(540px,calc(100svh-210px))] lg:w-auto lg:max-w-none";
 
-const panel = "rounded-2xl border border-white/10 bg-[#0d0c18]/95 p-3 shadow-[0_12px_32px_rgba(0,0,0,0.4)]";
+const panel = "rounded-2xl border border-white/10 bg-[#0d0c18]/95 p-3.5 shadow-[0_16px_40px_rgba(0,0,0,0.45)]";
+
+const spotlight =
+    "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 [background:radial-gradient(260px_circle_at_var(--mx)_var(--my),rgba(255,255,255,0.12),transparent_65%)]";
 
 function Chip({ children, className, tone }: { children: ReactNode; className?: string; tone: string }) {
     return (
@@ -32,10 +36,13 @@ function Chip({ children, className, tone }: { children: ReactNode; className?: 
     );
 }
 
-function Frame({ border, outer, inner, children }: { border: string; outer: string; inner: string; children: ReactNode }) {
+function Frame({ ring, outer, inner, children }: { ring: string; outer: string; inner: string; children: ReactNode }) {
     return (
-        <div data-in className={cn("relative h-full w-full p-px", outer, border)}>
-            <div className={cn("relative h-full w-full overflow-hidden bg-[#0b0a14]", inner)}>{children}</div>
+        <div data-in data-spot className={cn("group relative h-full w-full p-px [--mx:50%] [--my:50%]", outer, ring)}>
+            <div className={cn("relative h-full w-full overflow-hidden bg-[#0b0a14]", inner)}>
+                {children}
+                <div className={spotlight} />
+            </div>
         </div>
     );
 }
@@ -48,59 +55,46 @@ function FrameImage({ src }: { src: string }) {
     );
 }
 
+const decay = [100, 94, 86, 77, 68, 60, 53, 47, 42, 38, 35, 32, 30, 28];
+
 function InventoryVisual() {
     return (
         <div className={frameSize}>
-            <div className="pointer-events-none absolute -inset-12 bg-[radial-gradient(closest-side,rgba(56,189,248,0.2),transparent)]" />
+            <div className="pointer-events-none absolute -inset-14 bg-[radial-gradient(closest-side,rgba(56,189,248,0.2),transparent)]" />
 
-            <Frame border="bg-gradient-to-br from-sky-300/50 via-white/10 to-violet-400/40" outer="rounded-3xl" inner="rounded-[calc(1.5rem-1px)]">
+            <Frame ring="bg-gradient-to-br from-sky-300/60 via-white/10 to-violet-400/40" outer="rounded-[2rem]" inner="rounded-[calc(2rem-1px)]">
                 <FrameImage src="/1-1.webp" />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0a14] via-transparent to-transparent" />
                 <div data-scan className="pointer-events-none absolute inset-x-0 top-0 h-[28%] border-b border-sky-300/70 bg-gradient-to-b from-transparent to-sky-400/20" />
-                <span className="absolute left-3 top-3 h-5 w-5 rounded-tl-lg border-l-2 border-t-2 border-sky-300/70" />
-                <span className="absolute right-3 top-3 h-5 w-5 rounded-tr-lg border-r-2 border-t-2 border-sky-300/70" />
-                <span className="absolute bottom-3 left-3 h-5 w-5 rounded-bl-lg border-b-2 border-l-2 border-sky-300/70" />
-                <span className="absolute bottom-3 right-3 h-5 w-5 rounded-br-lg border-b-2 border-r-2 border-sky-300/70" />
+                <div className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[10px] font-medium text-sky-100">
+                    <span className="h-1.5 w-1.5 rounded-full bg-sky-300" />
+                    اسکن انبار
+                </div>
             </Frame>
 
-            <Chip tone="border-sky-300/30 text-sky-100" className="-left-3 top-10 lg:-left-10">
+            <Chip tone="border-sky-300/30 text-sky-100" className="-left-3 top-14 lg:-left-10">
                 <span className="h-1.5 w-1.5 rounded-full bg-sky-300" />
                 شمارش کامل انبار
             </Chip>
 
-            <div className="absolute -bottom-7 -right-3 z-20 w-[84%] lg:-right-12 lg:w-[88%]">
+            <div className="absolute -bottom-7 -right-3 z-20 w-[86%] lg:-right-12 lg:w-[90%]">
                 <div data-in className={panel} dir="rtl">
-                    <div className="mb-1 flex items-center justify-between">
-                        <span className="text-[10.5px] font-semibold text-white">دقت موجودی انبار</span>
-                        <span className="text-[9px] text-slate-400">در طول سال</span>
+                    <div className="mb-3 flex items-center justify-between">
+                        <span className="text-[11px] font-semibold text-white">دقت موجودی بعد از انبارگردانی</span>
                     </div>
-                    <svg viewBox="0 0 220 80" className="h-16 w-full" fill="none" aria-hidden>
-                        <defs>
-                            <linearGradient id="invStroke" x1="0" y1="0" x2="1" y2="0">
-                                <stop offset="0%" stopColor="#38bdf8" />
-                                <stop offset="100%" stopColor="#a78bfa" />
-                            </linearGradient>
-                        </defs>
-                        <line x1="0" y1="14" x2="220" y2="14" stroke="rgba(255,255,255,0.12)" strokeDasharray="3 4" />
-                        <path
-                            data-draw
-                            pathLength={1}
-                            strokeDasharray={1}
-                            d="M0 62 L22 62 L26 14 C34 32 40 50 52 58 C80 66 110 68 128 68 L132 14 C140 32 146 50 158 58 C186 66 206 68 220 68"
-                            stroke="url(#invStroke)"
-                            strokeWidth="2.4"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                        <circle cx="26" cy="14" r="3.5" fill="#38bdf8" />
-                        <circle cx="132" cy="14" r="3.5" fill="#38bdf8" />
-                    </svg>
-                    <div className="mt-1 flex items-center justify-between text-[9px] text-slate-300">
-                        <span className="flex items-center gap-1.5">
-                            <span className="h-1.5 w-1.5 rounded-full bg-sky-300" />
-                            روز انبارگردانی
-                        </span>
-                        <span>یک تا دو هفته بعد: دوباره آشفته</span>
+                    <div className="flex h-14 items-end gap-1">
+                        {decay.map((height, i) => (
+                            <span
+                                key={i}
+                                data-col
+                                style={{ height: `${height}%` }}
+                                className={cn("block flex-1 origin-bottom rounded-[3px]", i < 4 ? "bg-sky-300" : i < 9 ? "bg-violet-400" : "bg-rose-400")}
+                            />
+                        ))}
+                    </div>
+                    <div className="mt-2 flex items-center justify-between text-[9.5px] text-slate-400">
+                        <span>روز شمارش</span>
+                        <span>یک تا دو هفته بعد</span>
                     </div>
                 </div>
             </div>
@@ -108,13 +102,19 @@ function InventoryVisual() {
     );
 }
 
+const tasks = [
+    { label: "تأیید خرید قفسه‌ی ۳", tag: "فوری", tone: "bg-amber-400/15 text-amber-200" },
+    { label: "پیگیری گزارش انباردار", tag: "امروز", tone: "bg-rose-400/15 text-rose-200" },
+    { label: "چک دستی موجودی کالاها", tag: "باز", tone: "bg-sky-400/15 text-sky-200" },
+];
+
 function ManagerVisual() {
     return (
         <div className={frameSize}>
-            <div className="pointer-events-none absolute -inset-12 bg-[radial-gradient(closest-side,rgba(251,146,60,0.2),transparent)]" />
+            <div className="pointer-events-none absolute -inset-14 bg-[radial-gradient(closest-side,rgba(251,146,60,0.2),transparent)]" />
             <div className="pointer-events-none absolute -inset-4 rounded-t-[999px] rounded-b-[2.5rem] border border-dashed border-amber-300/25" />
 
-            <Frame border="bg-gradient-to-b from-amber-300/50 via-white/10 to-rose-400/40" outer="rounded-t-[999px] rounded-b-[2rem]" inner="rounded-t-[999px] rounded-b-[calc(2rem-1px)]">
+            <Frame ring="bg-gradient-to-b from-amber-300/60 via-white/10 to-rose-400/40" outer="rounded-t-[999px] rounded-b-[2rem]" inner="rounded-t-[999px] rounded-b-[calc(2rem-1px)]">
                 <FrameImage src="/2-2.webp" />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0a14] via-transparent to-transparent" />
             </Frame>
@@ -122,25 +122,26 @@ function ManagerVisual() {
             <Chip tone="border-amber-300/30 text-amber-100" className="-right-2 top-24 lg:-right-10">
                 «فقط خودم می‌تونم چک کنم»
             </Chip>
-            <Chip tone="border-rose-300/30 text-rose-100" className="-left-2 top-[46%] lg:-left-10">
-                صادرات؟ بعداً…
-            </Chip>
 
-            <div className="absolute -bottom-7 left-1/2 z-20 w-[92%] -translate-x-1/2 lg:w-[96%]">
+            <div className="absolute -bottom-7 left-1/2 z-20 w-[94%] -translate-x-1/2 lg:w-[98%]">
                 <div data-in className={panel} dir="rtl">
-                    <p className="mb-2 text-[10.5px] font-semibold text-white">وقت و ذهن مدیر کجا خرج می‌شه؟</p>
-                    <div className="space-y-2">
-                        <div>
-                            <div className="mb-1 text-[9px] text-slate-300">درگیر جزئیات و فرایندها</div>
-                            <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
-                                <div data-bar className="h-full w-[82%] origin-right rounded-full bg-gradient-to-l from-amber-400 to-rose-500" />
+                    <p className="mb-2.5 text-[11px] font-semibold text-white">صف کارهای مدیر</p>
+                    <div className="space-y-1.5">
+                        {tasks.map(task => (
+                            <div key={task.label} data-row className="flex items-center justify-between rounded-xl border border-white/[0.07] bg-white/[0.04] px-2.5 py-2">
+                                <div className="flex items-center gap-2">
+                                    <span className="h-3.5 w-3.5 rounded-full border border-amber-300/60" />
+                                    <span className="text-[10.5px] text-slate-200">{task.label}</span>
+                                </div>
+                                <span className={cn("rounded-full px-2 py-0.5 text-[9px] font-semibold", task.tone)}>{task.tag}</span>
                             </div>
-                        </div>
-                        <div>
-                            <div className="mb-1 text-[9px] text-slate-300">رشد، خلاقیت، صادرات</div>
-                            <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
-                                <div data-bar className="h-full w-[18%] origin-right rounded-full bg-gradient-to-l from-emerald-300 to-teal-400" />
+                        ))}
+                        <div data-row className="flex items-center justify-between rounded-xl border border-dashed border-white/15 px-2.5 py-2 opacity-60">
+                            <div className="flex items-center gap-2">
+                                <Lock size={12} className="text-slate-400" />
+                                <span className="text-[10.5px] text-slate-300">طرح توسعه و صادرات</span>
                             </div>
+                            <span className="rounded-full bg-white/10 px-2 py-0.5 text-[9px] font-semibold text-slate-300">منتظر وقت</span>
                         </div>
                     </div>
                 </div>
@@ -154,9 +155,9 @@ const hiddenCosts = ["کالای راکد", "خرید تکراری", "ساعت�
 function HiddenCostVisual() {
     return (
         <div className={frameSize}>
-            <div className="pointer-events-none absolute -inset-12 bg-[radial-gradient(closest-side,rgba(244,63,94,0.2),transparent)]" />
+            <div className="pointer-events-none absolute -inset-14 bg-[radial-gradient(closest-side,rgba(244,63,94,0.2),transparent)]" />
 
-            <Frame border="bg-gradient-to-b from-violet-300/40 via-white/10 to-rose-400/50" outer="rounded-[2.5rem]" inner="rounded-[calc(2.5rem-1px)]">
+            <Frame ring="bg-gradient-to-b from-violet-300/50 via-white/10 to-rose-400/60" outer="rounded-[2.5rem]" inner="rounded-[calc(2.5rem-1px)]">
                 <FrameImage src="/3-3.webp" />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[54%] bg-gradient-to-t from-[#08070d] via-[#08070d]/85 to-transparent" />
                 <div className="pointer-events-none absolute inset-x-0 top-[46%] border-t border-dashed border-white/40" />
@@ -174,17 +175,21 @@ function HiddenCostVisual() {
                 گلوگاه کجاست؟
             </Chip>
 
-            <div className="absolute -bottom-7 -right-3 z-20 w-[72%] lg:-right-12 lg:w-[76%]">
+            <div className="absolute -bottom-7 -right-3 z-20 w-[74%] lg:-right-12 lg:w-[78%]">
                 <div data-in className={panel} dir="rtl">
-                    <p className="mb-2 text-[10.5px] font-semibold text-white">ردیف‌هایی که توی گزارش مالی نیست</p>
+                    <p className="mb-2.5 text-[11px] font-semibold text-white">ردیف‌هایی که توی گزارش مالی نیست</p>
                     <ul className="space-y-1.5">
                         {hiddenCosts.map(label => (
-                            <li key={label} className="flex items-center justify-between text-[10px] text-slate-300">
+                            <li key={label} data-row className="flex items-center justify-between text-[10.5px] text-slate-300">
                                 <span>{label}</span>
                                 <span className="select-none font-bold tabular-nums text-rose-300 blur-[4px]">۸۸٬۸۸۸٬۰۰۰</span>
                             </li>
                         ))}
                     </ul>
+                    <div className="mt-2.5 flex items-center justify-between border-t border-white/10 pt-2.5">
+                        <span className="text-[10.5px] font-semibold text-white">مجموع واقعی</span>
+                        <span className="text-base font-black text-rose-300">؟</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -193,6 +198,7 @@ function HiddenCostVisual() {
 
 type Step = {
     key: string;
+    num: string;
     index: string;
     badge: string;
     title: string;
@@ -209,6 +215,7 @@ type Step = {
 const steps: Step[] = [
     {
         key: "inventory",
+        num: "۰۱",
         index: "پله‌ی اول",
         badge: "انبارگردانی",
         title: "انبار رو می‌شمری، ولی دو هفته بعد دوباره همون آشفتگی",
@@ -223,6 +230,7 @@ const steps: Step[] = [
     },
     {
         key: "management",
+        num: "۰۲",
         index: "پله‌ی دوم",
         badge: "مدیریت",
         title: "تو مدیری، نه نگهبانِ تک‌تک پله‌های کار",
@@ -237,6 +245,7 @@ const steps: Step[] = [
     },
     {
         key: "hidden-costs",
+        num: "۰۳",
         index: "پله‌ی سوم",
         badge: "هزینه‌های پنهان",
         title: "تا حالا به هزینه‌های پنهانت فکر کردی؟",
@@ -254,11 +263,30 @@ const steps: Step[] = [
 export default function HomePainPoints() {
     const sectionRef = useRef<HTMLElement>(null);
     const stageRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const stepRefs = useRef<(HTMLSpanElement | null)[]>([]);
+    const railRefs = useRef<(HTMLButtonElement | null)[]>([]);
+    const fillRef = useRef<HTMLSpanElement>(null);
+    const goToRef = useRef<((index: number) => void) | null>(null);
     const isAnimatingRef = useRef(false);
     const activeStepRef = useRef(0);
 
     useEffect(() => {
+        const section = sectionRef.current;
+        if (!section) return;
+
+        let frame = 0;
+        const onPointerMove = (event: PointerEvent) => {
+            if (event.pointerType !== "mouse" || frame) return;
+            const target = (event.target as HTMLElement).closest<HTMLElement>("[data-spot]");
+            if (!target) return;
+            frame = requestAnimationFrame(() => {
+                frame = 0;
+                const rect = target.getBoundingClientRect();
+                target.style.setProperty("--mx", `${event.clientX - rect.left}px`);
+                target.style.setProperty("--my", `${event.clientY - rect.top}px`);
+            });
+        };
+        section.addEventListener("pointermove", onPointerMove, { passive: true });
+
         let io: IntersectionObserver | undefined;
 
         const ctx = gsap.context(() => {
@@ -313,27 +341,30 @@ export default function HomePainPoints() {
                     if (targets.length) tl.fromTo(targets, from, to, at + offset);
                 };
                 add("[data-in]", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out" }, 0);
-                add("[data-draw]", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.5, ease: "power2.out" }, 0.5);
-                add("[data-bar]", { scaleX: 0 }, { scaleX: 1, duration: 1.2, stagger: 0.2, ease: "power3.out" }, 0.6);
+                add("[data-col]", { scaleY: 0 }, { scaleY: 1, duration: 0.7, stagger: 0.04, ease: "power3.out" }, 0.6);
+                add("[data-row]", { x: 28, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, stagger: 0.12, ease: "power3.out" }, 0.7);
                 add("[data-pop]", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(2)" }, 0.9);
             };
 
             const mm = gsap.matchMedia();
 
             mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
-                const section = sectionRef.current;
-                if (!section) return;
-
                 const setStep = (index: number) => {
                     activeStepRef.current = index;
-                    stepRefs.current.forEach((el, i) => {
-                        if (el) gsap.to(el, { opacity: i === index ? 1 : 0.25, scaleY: i === index ? 1.2 : 0.4, scaleX: i === index ? 1.5 : 1, duration: 0.4, ease: "power3.out", overwrite: true });
+                    railRefs.current.forEach((el, i) => {
+                        if (!el) return;
+                        const active = i === index;
+                        const dot = el.querySelector<HTMLElement>("[data-dot]");
+                        gsap.to(el, { opacity: active ? 1 : 0.4, duration: 0.4, overwrite: true });
+                        if (dot) gsap.to(dot, { scale: active ? 1.35 : 1, backgroundColor: active ? "#7dd3fc" : "#08070d", duration: 0.4, overwrite: true });
                     });
                     sync();
                 };
                 setStep(0);
 
                 gsap.set([stages[1], stages[2]], { autoAlpha: 0 });
+                gsap.set(fillRef.current, { scaleY: 0, transformOrigin: "50% 0%" });
+                const setFill = gsap.quickSetter(fillRef.current, "scaleY");
 
                 const tl = gsap.timeline({
                     defaults: { ease: "power2.inOut" },
@@ -346,6 +377,7 @@ export default function HomePainPoints() {
                         anticipatePin: 1,
                         invalidateOnRefresh: true,
                         onUpdate: self => {
+                            setFill(self.progress);
                             const t = self.progress * TOTAL;
                             const index = t < 3.4 ? 0 : t < 7.9 ? 1 : 2;
                             if (index !== activeStepRef.current && !isAnimatingRef.current) setStep(index);
@@ -369,23 +401,8 @@ export default function HomePainPoints() {
                 const trigger = tl.scrollTrigger;
                 let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
-                const onWheel = (event: WheelEvent) => {
-                    if (!trigger) return;
-
-                    const y = window.scrollY;
-                    if (y < trigger.start - 2 || y > trigger.end + 2) return;
-
-                    if (isAnimatingRef.current) {
-                        event.preventDefault();
-                        return;
-                    }
-
-                    if (Math.abs(event.deltaY) < 14) return;
-
-                    const nextStep = activeStepRef.current + Math.sign(event.deltaY);
-                    if (nextStep < 0 || nextStep > 2) return;
-
-                    event.preventDefault();
+                const snapTo = (nextStep: number) => {
+                    if (!trigger || isAnimatingRef.current || nextStep === activeStepRef.current) return;
 
                     isAnimatingRef.current = true;
                     setStep(nextStep);
@@ -409,8 +426,31 @@ export default function HomePainPoints() {
                     });
                 };
 
+                goToRef.current = snapTo;
+
+                const onWheel = (event: WheelEvent) => {
+                    if (!trigger) return;
+
+                    const y = window.scrollY;
+                    if (y < trigger.start - 2 || y > trigger.end + 2) return;
+
+                    if (isAnimatingRef.current) {
+                        event.preventDefault();
+                        return;
+                    }
+
+                    if (Math.abs(event.deltaY) < 14) return;
+
+                    const nextStep = activeStepRef.current + Math.sign(event.deltaY);
+                    if (nextStep < 0 || nextStep > 2) return;
+
+                    event.preventDefault();
+                    snapTo(nextStep);
+                };
+
                 section.addEventListener("wheel", onWheel, { passive: false });
                 return () => {
+                    goToRef.current = null;
                     section.removeEventListener("wheel", onWheel);
                     if (debounceTimer) clearTimeout(debounceTimer);
                 };
@@ -432,6 +472,8 @@ export default function HomePainPoints() {
 
         return () => {
             cancelled = true;
+            if (frame) cancelAnimationFrame(frame);
+            section.removeEventListener("pointermove", onPointerMove);
             io?.disconnect();
             ctx.revert();
         };
@@ -439,6 +481,8 @@ export default function HomePainPoints() {
 
     return (
         <section ref={sectionRef} className="relative px-4 py-20 sm:px-6 lg:px-8 motion-safe:lg:h-[calc(100svh-86px)] motion-safe:lg:py-0">
+            <div className="pointer-events-none absolute inset-0 [background-image:radial-gradient(rgba(255,255,255,0.07)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_60%_55%_at_50%_50%,black,transparent)]" />
+
             <div className="relative mx-auto w-full max-w-6xl space-y-32 pb-10 motion-safe:lg:h-full motion-safe:lg:space-y-0 motion-safe:lg:pb-0">
                 {steps.map((step, i) => (
                     <div
@@ -454,15 +498,19 @@ export default function HomePainPoints() {
                             <div className={cn("flex w-full justify-center pb-8 lg:pb-6", step.flip ? "lg:order-2 lg:justify-end" : "lg:order-1 lg:justify-start")}>{step.visual}</div>
 
                             <div dir="rtl" className={cn("order-first flex w-full justify-center lg:justify-start", step.flip ? "lg:order-1" : "lg:order-2")}>
-                                <div className="flex max-w-lg flex-col items-center text-center lg:items-start lg:text-right">
-                                    <div data-in className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] py-1 pl-3.5 pr-1 text-xs font-medium text-slate-300">
+                                <div className="relative flex max-w-lg flex-col items-center text-center lg:items-start lg:text-right">
+                                    <span className="pointer-events-none absolute -top-16 right-1/2 translate-x-1/2 select-none text-[9rem] font-black leading-none text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.09)] lg:-top-24 lg:right-0 lg:translate-x-0 lg:text-[12rem]">
+                                        {step.num}
+                                    </span>
+
+                                    <div data-in className="relative mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] py-1 pl-3.5 pr-1 text-xs font-medium text-slate-300">
                                         <span className={cn("rounded-full px-2.5 py-1 text-[11px] font-bold", step.indexTone)}>{step.index}</span>
                                         {step.badge}
                                     </div>
-                                    <h2 data-in className={cn("bg-gradient-to-l bg-clip-text text-3xl font-black leading-[1.55] text-transparent sm:text-4xl lg:text-[2.5rem]", step.titleGradient)}>
+                                    <h2 data-in className={cn("relative bg-gradient-to-l bg-clip-text text-3xl font-black leading-[1.55] text-transparent sm:text-4xl lg:text-[2.5rem]", step.titleGradient)}>
                                         {step.title}
                                     </h2>
-                                    <p data-in className="mt-5 text-sm leading-8 text-slate-400 sm:text-base">
+                                    <p data-in className="relative mt-5 text-sm leading-8 text-slate-400 sm:text-base">
                                         {step.body}
                                     </p>
                                     <div data-in className="relative mt-6 w-full rounded-2xl border border-white/10 bg-white/[0.03] py-3 pl-4 pr-5 text-right">
@@ -476,16 +524,26 @@ export default function HomePainPoints() {
                 ))}
             </div>
 
-            <div className="pointer-events-none absolute right-4 top-1/2 hidden -translate-y-1/2 flex-col gap-2.5 motion-safe:lg:flex xl:right-8">
-                {[0, 1, 2].map(i => (
-                    <span
-                        key={i}
-                        ref={el => {
-                            stepRefs.current[i] = el;
-                        }}
-                        className="h-8 w-[3px] rounded-full bg-gradient-to-b from-sky-300 to-violet-400 opacity-25"
-                    />
-                ))}
+            <div dir="rtl" className="absolute right-4 top-1/2 hidden -translate-y-1/2 motion-safe:lg:block xl:right-8">
+                <div className="relative flex flex-col gap-7">
+                    <span className="absolute bottom-2 right-[5px] top-2 w-px bg-white/10" />
+                    <span ref={fillRef} className="absolute right-[5px] top-2 h-[calc(100%-1rem)] w-px bg-gradient-to-b from-sky-300 to-violet-400" />
+                    {steps.map((step, i) => (
+                        <button
+                            key={step.key}
+                            type="button"
+                            aria-label={step.badge}
+                            ref={el => {
+                                railRefs.current[i] = el;
+                            }}
+                            onClick={() => goToRef.current?.(i)}
+                            className="relative flex items-center gap-3 opacity-40"
+                        >
+                            <span data-dot className="relative z-10 h-[11px] w-[11px] rounded-full border border-white/40 bg-[#08070d]" />
+                            <span className="hidden text-[11px] font-medium text-slate-300 2xl:block">{step.badge}</span>
+                        </button>
+                    ))}
+                </div>
             </div>
         </section>
     );
