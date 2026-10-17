@@ -178,15 +178,22 @@ export default function HomeHero() {
                 let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
                 const onWheel = (event: WheelEvent) => {
+                    if (!trigger) return;
+
+                    const y = window.scrollY;
+                    if (y < trigger.start - 2 || y > trigger.end + 2) return;
+
+                    if (isAnimatingRef.current) {
+                        event.preventDefault();
+                        return;
+                    }
+
                     if (Math.abs(event.deltaY) < 14) return;
+
+                    const nextStep = activeStepRef.current + Math.sign(event.deltaY);
+                    if (nextStep < 0 || nextStep > 2) return;
+
                     event.preventDefault();
-
-                    if (isAnimatingRef.current) return;
-
-                    const direction = Math.sign(event.deltaY);
-                    const nextStep = Math.max(0, Math.min(2, activeStepRef.current + direction));
-
-                    if (nextStep === activeStepRef.current || !trigger) return;
 
                     isAnimatingRef.current = true;
                     setStep(nextStep);
@@ -207,7 +214,7 @@ export default function HomeHero() {
                             if (debounceTimer) clearTimeout(debounceTimer);
                             debounceTimer = setTimeout(() => {
                                 isAnimatingRef.current = false;
-                            }, 200);
+                            }, 250);
                         }
                     });
                 };
